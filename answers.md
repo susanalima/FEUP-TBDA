@@ -30,6 +30,15 @@ order by c.program, c.year
 uma formulação que use uma subpergunta constante com a equivalente que use uma subpergunta variável
 (sugestão: usar EXISTS)."
 
+```
+select count(*) as notEnrolled
+from xcandidates c
+where result = 'C' and
+NOT EXISTS (
+select s.id
+from xstudents s
+where c.id = s.id and c.year = s.enroll_year and c.program = s.program)
+```
 
 4. "Estude as tentativas de resposta à questão “Qual o curso com a melhor média de conclusão em cada ano
 lectivo” apresentadas abaixo. Comente-as."
