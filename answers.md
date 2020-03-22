@@ -5,10 +5,16 @@
 1. "Qual a lista dos números dos alunos especiais, que terminaram o curso com sigla EIC em menos de cinco
 anos, e quantos anos demoraram."
 
-    1.
-    2.
-    3.
-    4.
+
+```
+select s.nr, s.conclusion_year - s.enroll_year as years
+from  xstudents s join xprograms  p on  s.program = p.code
+where p.acronym = 'EIC' and  s.conclusion_year - s.enroll_year < 5 and s.status = 'C'
+order by s.nr
+```
+
+
+
 
 2. "Qual a média mínima de candidatura em cada curso, em cada ano, dos alunos matriculados? Nem todas
 as candidaturas têm a média preenchida."
