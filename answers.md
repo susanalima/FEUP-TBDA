@@ -44,6 +44,28 @@ where c.id = s.id and c.year = s.enroll_year and c.program = s.program)
 lectivo” apresentadas abaixo. Comente-as."
 
 
+```
+select q1.conclusion_year, q1.program, q2.result
+from (
+select s.conclusion_year, s.program, max(s.final_average) as maxAvg
+from xstudents s
+where s.final_average is not null
+group by s.conclusion_year, s.program
+order by s.conclusion_year) q1,
+(select temp.conclusion_year, max(temp.maxAvg) as result
+from (
+select s.conclusion_year, s.program, max(s.final_average) as maxAvg
+from xstudents s
+where s.final_average is not null
+group by s.conclusion_year, s.program
+order by s.conclusion_year) temp
+group by temp.conclusion_year
+order by temp.conclusion_year) q2
+where q1.conclusion_year = q2.conclusion_year and
+q1.maxAvg = q2.result
+``` 
+
+
 5. "Compare os planos de execução da pesquisa “Quantos candidatos tiveram como resultado algo diferente de “C” ou “E”, usando, no contexto Z
 
     a. Com índice árvore-B em Resultado;
@@ -83,7 +105,7 @@ order by candidates.year, candidates.program
 
 ```
 
-### double negation
+#### double negation:
 
 ```
 select candidates.year, p.acronym, p.designation
