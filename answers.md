@@ -14,10 +14,16 @@ order by s.nr
 ```
 
 
-
-
 2. "Qual a média mínima de candidatura em cada curso, em cada ano, dos alunos matriculados? Nem todas
 as candidaturas têm a média preenchida."
+
+```
+select  c.program, c.year, min(c.average)  as minAverage
+from xcandidates c
+where average is not null and c.result = 'C'
+group by c.program, c.year
+order by c.program, c.year
+```
 
 
 3. "Considere a questão de saber quantos candidatos aceites não se matricularam nesse ano lectivo. Compare
