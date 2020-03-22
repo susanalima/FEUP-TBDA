@@ -42,6 +42,12 @@ lectivo” apresentadas abaixo. Comente-as."
     b. Com índice bitmap em Resultado. "
 
 
+```
+select count(*) as nrCandidates
+from xcandidates c
+where c.result != 'C' and c.result != 'E'
+```
+
 6. "A pergunta “Há, em algum ano algum curso (ano_lectivo, sigla e nome) que tenha todas as candidaturas
 aceites transformadas em matrículas, nesse mesmo ano?” é de natureza universal. Compare do ponto de
 vista temporal e de plano de execução as estratégias da dupla negação e da contagem."
