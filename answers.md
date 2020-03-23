@@ -40,25 +40,22 @@ from xstudents s
 where c.id = s.id and c.year = s.enroll_year and c.program = s.program)
 ```
 
-4. "Estude as tentativas de resposta à questão “Qual o curso com a melhor média de conclusão em cada ano
-lectivo” apresentadas abaixo. Comente-as."
+4. "Estude as tentativas de resposta à questão “Qual o curso do aluno com a melhor média de conclusão em
+cada ano lectivo” apresentadas abaixo. Comente-as."
 
 
 ```
+with aux as (
+select s.conclusion_year, s.program, max(s.final_average) as maxAvg
+from xstudents s
+where s.final_average is not null
+group by s.conclusion_year, s.program
+order by s.conclusion_year)
+
 select q1.conclusion_year, q1.program, q2.result
-from (
-select s.conclusion_year, s.program, max(s.final_average) as maxAvg
-from xstudents s
-where s.final_average is not null
-group by s.conclusion_year, s.program
-order by s.conclusion_year) q1,
+from aux q1,
 (select temp.conclusion_year, max(temp.maxAvg) as result
-from (
-select s.conclusion_year, s.program, max(s.final_average) as maxAvg
-from xstudents s
-where s.final_average is not null
-group by s.conclusion_year, s.program
-order by s.conclusion_year) temp
+from aux temp
 group by temp.conclusion_year
 order by temp.conclusion_year) q2
 where q1.conclusion_year = q2.conclusion_year and
