@@ -1,3 +1,16 @@
+/*constante*/
+
+select c.year, count(*) as notEnrolled
+from xcandidates c
+where result = 'C' and
+(c.id, c.program, c.year) NOT IN (
+select s.id, s.program, s.enroll_year
+from xstudents s)
+group by c.year
+order by c.year
+
+/*variavel*/
+
 select c.year, count(*) as notEnrolled
 from xcandidates c
 where result = 'C' and

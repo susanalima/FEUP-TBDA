@@ -30,6 +30,23 @@ as candidaturas têm a média preenchida."
 uma formulação que use uma subpergunta constante com a equivalente que use uma subpergunta variável
 (sugestão: usar EXISTS)."
 
+
+#### constante:
+
+```
+    select c.year, count(*) as notEnrolled
+    from xcandidates c
+    where result = 'C' and
+    (c.id, c.program, c.year) NOT IN (
+    select s.id, s.program, s.enroll_year
+    from xstudents s)
+    group by c.year
+    order by c.year
+```
+
+
+#### variavel:
+
 ```
     select c.year, count(*) as notEnrolled
     from xcandidates c
