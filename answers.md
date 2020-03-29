@@ -6,7 +6,7 @@
 anos, e quantos anos demoraram."
 
 
-```
+``` sql
     select s.nr, s.conclusion_year - s.enroll_year as years
     from  xstudents s join xprograms p on  s.program = p.code
     where p.acronym = 'EIC' and  s.conclusion_year - s.enroll_year < 5 and s.status = 'C'
@@ -17,7 +17,7 @@ anos, e quantos anos demoraram."
 2. "Qual a média mínima de candidatura em cada curso, em cada ano, dos alunos matriculados? Nem todas
 as candidaturas têm a média preenchida."
 
-```
+``` sql
     select  c.program, c.year, min(c.average)  as minAverage
     from xcandidates c
     where average is not null and c.result = 'C'
@@ -33,13 +33,14 @@ uma formulação que use uma subpergunta constante com a equivalente que use uma
 
 #### constante:
 
-```
+``` sql
     select c.year, count(*) as notEnrolled
     from xcandidates c
     where result = 'C' and
     (c.id, c.program, c.year) NOT IN (
-    select s.id, s.program, s.enroll_year
-    from xstudents s)
+        select s.id, s.program, s.enroll_year
+        from xstudents s
+    )
     group by c.year
     order by c.year
 ```
@@ -47,14 +48,15 @@ uma formulação que use uma subpergunta constante com a equivalente que use uma
 
 #### variavel:
 
-```
+``` sql
     select c.year, count(*) as notEnrolled
     from xcandidates c
     where result = 'C' and
     NOT EXISTS (
-    select s.enroll_year
-    from xstudents s
-    where c.id = s.id and c.year = s.enroll_year and c.program = s.program)
+        select s.enroll_year
+        from xstudents s
+        where c.id = s.id and c.year = s.enroll_year and c.program = s.program
+    )
     group by c.year
     order by c.year
 ```
@@ -63,23 +65,36 @@ uma formulação que use uma subpergunta constante com a equivalente que use uma
 cada ano lectivo” apresentadas abaixo. Comente-as."
 
 
-```
+``` sql
     with aux as (
-    select s.conclusion_year, s.program, max(s.final_average) as maxAvg
-    from xstudents s
-    where s.final_average is not null
-    group by s.conclusion_year, s.program
-    order by s.conclusion_year)
+        select s.conclusion_year, s.program, max(s.final_average) as maxAvg
+        from xstudents s
+        where s.final_average is not null
+        group by s.conclusion_year, s.program
+        order by s.conclusion_year
+    )
 
     select q1.conclusion_year, q1.program, q2.result
     from aux q1,
-    (select temp.conclusion_year, max(temp.maxAvg) as result
-    from aux temp
-    group by temp.conclusion_year
-    order by temp.conclusion_year) q2
+    (
+        select temp.conclusion_year, max(temp.maxAvg) as result
+        from aux temp
+        group by temp.conclusion_year
+        order by temp.conclusion_year
+    ) q2
     where q1.conclusion_year = q2.conclusion_year and
     q1.maxAvg = q2.result
 ``` 
+
+Since the question leaves some room for discution this is another approach
+``` sql
+    select p.acronym,s.enroll_year,max(s.final_average)
+    from xprograms p,xstudents s
+    where p.code = s.program 
+        and s.status = 'C'
+    group by p.acronym,s.enroll_year
+    order by p.acronym,s.enroll_year
+```
 
 
 5. "Compare os planos de execução da pesquisa “Quantos candidatos tiveram como resultado algo diferente de “C” ou “E”, usando, no contexto Z
@@ -89,7 +104,7 @@ cada ano lectivo” apresentadas abaixo. Comente-as."
     b. Com índice bitmap em Resultado. "
 
 
-```
+``` sql
     select count(*) as nrCandidates
     from xcandidates c
     where c.result != 'C' and c.result != 'E'
@@ -102,16 +117,20 @@ vista temporal e de plano de execução as estratégias da dupla negação e da 
 
 #### count:
 
-```
+``` sql
     select candidates.year, p.acronym, p.designation
     from 
-    (select s.enroll_year, s.program, count(*) nr
-    from xstudents s
-    group by s.enroll_year, s.program) students, 
-    (select c.year, c.program, count(*) nr
-    from xcandidates c
-    where c.result = 'C'
-    group by c.year, c.program) candidates,
+    (
+        select s.enroll_year, s.program, count(*) nr
+        from xstudents s
+        group by s.enroll_year, s.program
+    ) students, 
+    (
+        select c.year, c.program, count(*) nr
+        from xcandidates c
+        where c.result = 'C'
+        group by c.year, c.program
+    ) candidates, 
     xprograms p
     where students.enroll_year = candidates.year 
     and students.program = candidates.program
@@ -123,23 +142,23 @@ vista temporal e de plano de execução as estratégias da dupla negação e da 
 
 #### double negation:
 
-```
+``` sql
     select candidates.year, p.acronym, p.designation
     from xcandidates candidates, xprograms p
     where p.code = candidates.program and
     candidates.result = 'C' and
     (program, year) not in (
-    select c.program, c.year
-    from xcandidates c
-    where c.result = 'C'
-    and not exists 
-    (
-        select s.enroll_year, s.program
-        from xstudents s
-        where s.enroll_year = c.year 
-        and s.program = c.program
-        and s.id = c.id
-    )
+        select c.program, c.year
+        from xcandidates c
+        where c.result = 'C'
+        and not exists 
+        ( 
+            select s.enroll_year, s.program
+            from xstudents s
+            where s.enroll_year = c.year 
+            and s.program = c.program
+            and s.id = c.id
+        )
     )
     group by candidates.year, p.acronym, p.designation
     order by candidates.year, p.acronym
