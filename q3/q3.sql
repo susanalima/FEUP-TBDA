@@ -9,6 +9,16 @@ from xstudents s)
 group by c.year
 order by c.year
 
+
+select c.year, count(*) as notEnrolled
+from zcandidates c
+where result = 'C' and
+(c.id, c.program, c.year) NOT IN (
+select s.id, s.program, s.enroll_year
+from zstudents s)
+group by c.year
+order by c.year
+
 /*variavel*/
 
 select c.year, count(*) as notEnrolled
@@ -21,6 +31,16 @@ where c.id = s.id and c.year = s.enroll_year and c.program = s.program)
 group by c.year
 order by c.year
 
+
+select c.year, count(*) as notEnrolled
+from zcandidates c
+where result = 'C' and
+NOT EXISTS (
+select s.enroll_year
+from zstudents s
+where c.id = s.id and c.year = s.enroll_year and c.program = s.program)
+group by c.year
+order by c.year
 /*
 
 does not work

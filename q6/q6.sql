@@ -17,6 +17,23 @@ and p.code = students.program
 order by candidates.year, candidates.program
 
 
+
+select candidates.year, p.acronym, p.designation
+from 
+(select s.enroll_year, s.program, count(*) nr
+from zstudents s
+group by s.enroll_year, s.program) students, 
+(select c.year, c.program, count(*) nr
+from zcandidates c
+where c.result = 'C'
+group by c.year, c.program) candidates,
+zprograms p
+where students.enroll_year = candidates.year 
+and students.program = candidates.program
+and students.nr = candidates.nr
+and p.code = students.program
+order by candidates.year, candidates.program
+
 /*double negation*/
 
 select candidates.year, p.acronym, p.designation
