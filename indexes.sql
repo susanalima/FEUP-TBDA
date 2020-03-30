@@ -1,4 +1,4 @@
-Create Index candidates_year on zcandidates (year);
+Create Index candidates_year on zcandidates (year,program);
 Create index students_id_program_enroll_year on zstudents (id,program,enroll_year);
 
 Create bitmap index candidates_result on zcandidates (result);

@@ -88,12 +88,18 @@ cada ano lectivo” apresentadas abaixo. Comente-as."
 
 Since the question leaves some room for discution this is another approach
 ``` sql
-    select p.acronym,s.enroll_year,max(s.final_average)
-    from xprograms p,xstudents s
-    where p.code = s.program 
-        and s.status = 'C'
-    group by p.acronym,s.enroll_year
-    order by p.acronym,s.enroll_year
+    Select distinct s1.conclusion_year,p.code,s2.max_average
+    From xprograms p, xstudents s1,
+    (
+        select s.conclusion_year,max(s.final_average) as max_average
+        from xstudents s
+        where s.status = 'C'
+        group by s.conclusion_year
+    ) s2
+    Where p.code = s1.program
+        and s1.conclusion_year = s2.conclusion_year
+        and s1.final_average = s2.max_average
+    Order by s1.conclusion_year
 ```
 
 
