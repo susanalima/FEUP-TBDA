@@ -62,7 +62,7 @@ create table docentes of docentes_t
     nested table docente_dsd store as docente_dsd_tab;
 
 create table ocurrencias of ocurrencias_t
-    nested table tiposAula as tiposAula_tab;
+    nested table tiposAula store as tiposAula_tab return as locator;
 
 create table ucs of ucs_t
-    nested table ocurrencias as ocurrencias_tab;
+    nested table ocurrencias store as ocurrencias_tab return as locator;
