@@ -2,14 +2,14 @@ create type tiposAula_t as object(
     tipo varchar(2),
     turnos number(2),
     n_aulas number(5),
-    horas_turno number(5),
+    horas_turno number(5)
 );
 
 create type dsd_t as object(
     horas number(10),
     fator number(2),
     ordem number(5),
-    tiposAula ref tiposAula_t,
+    tiposAula ref tiposAula_t
 );
 
 create type docente_dsd_tab_t as table of dsd_t;
@@ -22,7 +22,7 @@ create type docentes_t as object(
     proprio varchar(15),
     apelido varchar(15),
     estado varchar(2),
-    docente_dsd docente_dsd_tab_t,
+    docente_dsd docente_dsd_tab_t
 );
 
 create type tiposAula_dsd_tab_t as table of ref docentes_t;
@@ -40,7 +40,7 @@ create type ocurrencias_t as object(
     objetivos varchar(30),
     conteudo varchar(30),
     departamento varchar(30),
-    tiposAula tiposAula_tab_t,
+    tiposAula tiposAula_tab_t
 );
 
 create type ocurrencias_tab_t as table of ocurrencias_t;
@@ -50,7 +50,7 @@ create type ucs_t as object(
     designacao varchar(15),
     sigla_uc varchar(5),
     curso varchar(15),
-    ocurrencias ocurrencias_tab_t,
+    ocurrencias ocurrencias_tab_t
 );
 
 
