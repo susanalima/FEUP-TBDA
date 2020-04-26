@@ -48,7 +48,7 @@ create type tiposAula_dsd_tab_t as table of ref docentes_t;
 
 alter type tiposAula_t add attribute tiposAula_dsd tiposAula_dsd_tab_t cascade;
 
-create type tiposAula_tab_t as table of tiposAula_t;
+create type tiposAula_tab_t as table of ref tiposAula_t;
 
 create type ocorrencias_t as object(
     ano_letivo number(4),
@@ -62,7 +62,7 @@ create type ocorrencias_t as object(
     tiposAula tiposAula_tab_t
 );
 
-create type ocorrencias_tab_t as table of ocorrencias_t;
+create type ocorrencias_tab_t as table of ref ocorrencias_t;
 
 create type ucs_t as object(
     codigo varchar(7),
