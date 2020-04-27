@@ -8,7 +8,7 @@ from GTD10.xucs;
 
 insert into ocorrencias (ano_letivo, periodo, inscritos, com_frequencia, aprovados, objetivos, conteudo, departamento)
 select ano_letivo, periodo, inscritos, com_frequencia, aprovados, objetivos, conteudo, departamento
-from GTD10.XOCORRENCIAS;
+from GTD10.xocorrencias;
 
 insert into tiposAula (id, tipo, turnos, n_aulas, horas_turno)
 select id, tipo, turnos, n_aulas, horas_turno

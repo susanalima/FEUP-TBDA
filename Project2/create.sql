@@ -51,14 +51,14 @@ alter type tiposAula_t add attribute tiposAula_dsd tiposAula_dsd_tab_t cascade;
 create or replace type tiposAula_tab_t as table of ref tiposAula_t;
 
 create or replace type ocorrencias_t as object(
-    ano_letivo number(5),
+    ano_letivo varchar(10),
     periodo varchar(5),
     inscritos number(8),
     com_frequencia number(8),
     aprovados number(8),
-    objetivos varchar(50),
-    conteudo varchar(50),
-    departamento varchar(30),
+    objetivos varchar(4000),
+    conteudo varchar(4000),
+    departamento varchar(10),
     tiposAula tiposAula_tab_t
 );
 
