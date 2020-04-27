@@ -25,6 +25,8 @@ create or replace type tiposAula_t as object(
 );
 
 create or replace type dsd_t as object(
+    nr number(10),
+    id number(10),
     horas number(10),
     fator number(5),
     ordem number(5),
@@ -51,6 +53,7 @@ alter type tiposAula_t add attribute tiposAula_dsd tiposAula_dsd_tab_t cascade;
 create or replace type tiposAula_tab_t as table of ref tiposAula_t;
 
 create or replace type ocorrencias_t as object(
+    codigo varchar(10),
     ano_letivo varchar(10),
     periodo varchar(5),
     inscritos number(8),
