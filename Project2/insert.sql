@@ -15,15 +15,14 @@ select id, tipo, turnos, n_aulas, horas_turno
 from GTD10.xtiposaula;
 
 insert into dsd (nr, id, horas, fator, ordem, tiposAula)
-select nr, id, horas, fator, ordem, ref(ta)
+select nr, xdsd.id, horas, fator, ordem, ref(ta)
 from GTD10.xdsd xdsd, tiposAula ta
 where ta.id = xdsd.id;
-
 
 update docentes d
 set d.docente_dsd = cast(multiset(
     select ref(x)
-    from xdsd x
+    from dsd x
     where d.nr = x.nr) as docente_dsd_tab_t);
 
 

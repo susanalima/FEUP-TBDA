@@ -33,7 +33,7 @@ create or replace type dsd_t as object(
     tiposAula ref tiposAula_t
 );
 
-create or replace type docente_dsd_tab_t as table of dsd_t;
+create or replace type docente_dsd_tab_t as table of ref dsd_t;
 
 create or replace type docentes_t as object(
     nr number(10),
