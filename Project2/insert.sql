@@ -67,10 +67,11 @@ select nr, nome, sigla, categoria, proprio, apelido, estado,cast(multiset(
 ) as docente_dsd_tab_t)
 from GTD10.xdocentes d;
 
-update ucs u
-   set u.ocorrencias.tiposAula.tiposAula_dsd= cast(multiset(
+
+
+update table(select o.tiposAula from table(select u.ocorrencias from ucs u) o) ta
+   set ta.tiposAula_dsd= cast(multiset(
        select ref(d)
-       from docentes d
-       where u.ocorrencias.tiposAula.id = d.docente_dsd.id
-   ) as tiposAula_dsd_tab_t )
- where condition
+       from docentes d, table(d.docente_dsd) dsd
+       where ta.id = dsd.id
+   ) as tiposAula_dsd_tab_t );
