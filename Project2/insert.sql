@@ -25,4 +25,10 @@ set d.docente_dsd = cast(multiset(
     from dsd x
     where d.nr = x.nr) as docente_dsd_tab_t);
 
+update ucs u
+set u.ocorrencias = cast(multiset(
+    select ref(o)
+    from ocorrencias o
+    where o.codigo = u.codigo) as ocorrencias_tab_t);
+
 
