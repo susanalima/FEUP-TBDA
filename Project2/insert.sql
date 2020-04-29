@@ -31,4 +31,46 @@ set u.ocorrencias = cast(multiset(
     from ocorrencias o
     where o.codigo = u.codigo) as ocorrencias_tab_t);
 
+insert into docentes (nr,nome,sigla,categoria,proprio,apelido,estado,docente_dsd)
+select nr, nome, sigla, categoria, proprio, apelido, estado,cast(multiset(
+    select dsd_t(nr, id, horas, fator, ordem, null)
+    from GTD10.xdsd s
+    where d.nr = s.nr
+) as docente_dsd_tab_t)
+from GTD10.xdocentes d;
 
+
+
+-------------------------------------------------------------------------
+
+insert into ucs (codigo,designacao,sigla_uc,curso,ocorrencias)
+select codigo,designacao,sigla_uc,curso,cast(multiset(
+    select ocorrencias_t(o.codigo, o.ano_letivo, o.periodo, o.inscritos, o.com_frequencia, o.aprovados, o.objetivos, o.conteudo, o.departamento,cast(multiset(
+        select tiposAula_t(a.id, a.tipo, a.turnos, a.n_aulas, a.horas_turno,null)
+        from GTD10.xtiposaula a
+        where a.ano_letivo = o.ano_letivo and a.periodo = o.periodo and a.codigo = o.codigo
+    ) as tiposAula_tab_t))
+    from GTD10.xocorrencias o
+    where o.codigo = u.codigo
+)as ocorrencias_tab_t)
+from GTD10.xucs u;
+
+insert into docentes (nr,nome,sigla,categoria,proprio,apelido,estado,docente_dsd)
+select nr, nome, sigla, categoria, proprio, apelido, estado,cast(multiset(
+    select dsd_t(nr, id, horas, fator, ordem, (
+        select ref(u)
+        from ucs u , table(u.ocorrencias) o, table(o.tiposAula) ta
+        where ta.id = s.id
+    ))
+    from GTD10.xdsd s
+    where d.nr = s.nr
+) as docente_dsd_tab_t)
+from GTD10.xdocentes d;
+
+update ucs u
+   set u.ocorrencias.tiposAula.tiposAula_dsd= cast(multiset(
+       select ref(d)
+       from docentes d
+       where u.ocorrencias.tiposAula.id = d.docente_dsd.id
+   ) as tiposAula_dsd_tab_t )
+ where condition
