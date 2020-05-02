@@ -58,4 +58,9 @@ order by value(o).ano_letivo,  value(d).categoria
 
 /*e*/
 
+select value(o).ano_letivo as ano_letivo, value(o).periodo as periodo, sum(value(ta).horas_turno) as horas
+from ucs u,  table(value(u).ocorrencias) o, table(value(o).tiposAula) ta
+where value(ta).n_aulas is not null and value(ta).turnos is not null and value(ta).periodo like '%S'
+group by value(o).ano_letivo, value(o).periodo;
+
 /*f*/
