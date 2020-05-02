@@ -14,8 +14,11 @@ group by value(ta).tipo
 
 /*d*/
 
-select value(x).tiposAula
-from docentes d, table(value(d).docente_dsd) x
+select value(o).ano_letivo, value(d).categoria, round(avg(value(x).horas),3)
+from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d, table(value(d).docente_dsd) x
+where regexp_like (value(o).ano_letivo, '^200[1-4]')
+group by value(o).ano_letivo, value(d).categoria 
+order by value(o).ano_letivo,  value(d).categoria 
 
 /*e*/
 
