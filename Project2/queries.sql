@@ -12,6 +12,17 @@ group by value(ta).tipo
 
 /*c*/
 
+select value(o).ano_letivo, value(d).categoria
+from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d
+where value(o).ano_letivo = '2003/2004'
+
+
+select value(d).nr, value(d).nome,  value(o).ano_letivo, value(d).categoria
+from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d
+where value(o).ano_letivo = '2003/2004'
+
+
+
 /*d*/
 
 select value(o).ano_letivo, value(d).categoria, round(avg(value(x).horas),3)
