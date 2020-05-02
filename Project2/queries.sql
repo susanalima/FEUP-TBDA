@@ -26,20 +26,20 @@ from aux ht
 group by ht.tipo
  /********************/
 
-with horasPorTipo as (
-select value(d).nr as nr, value(d).nome as nome, value(ta).tipo as tipo, sum(value(x).horas) as horas
+create or replace view horasPorTipo as 
+select value(d).nr as nr, value(d).nome as nome, value(ta).tipo as tipo, sum(value(x).horas*value(x).fator) as horas
 from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d, table(value(d).docente_dsd) x
 where value(o).ano_letivo = '2003/2004'
 and value(ta).id = value(x).id
 group by value(d).nr, value(d).nome, value(ta).tipo
-order by value(d).nr
-), maxHorasPorTipo as (
+order by value(d).nr;
+
+create or replace view maxHorasPorTipo as 
 select  ht.tipo as tipo, max(ht.horas) as maxHoras
 from horasPorTipo ht
-group by ht.tipo
-)
+group by ht.tipo;
 
-select ht.nr, ht.nome, ht.tipo, ht.horas
+select ht.nr, ht.nome, ht.tipo, ht.horas as horasFator
 from horasPorTipo ht, maxHorasPorTipo mh
 where ht.tipo  = mh.tipo
 and ht.horas = mh.maxHoras;
