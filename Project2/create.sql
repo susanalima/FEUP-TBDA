@@ -49,7 +49,7 @@ create or replace type docentes_t as object(
     docente_dsd docente_dsd_tab_t
 );
 
-create or replace type tiposAula_dsd_tab_t as table of ref dsd_t;
+create or replace type tiposAula_dsd_tab_t as table of ref docentes_t;
 
 alter type tiposAula_t add attribute tiposAula_dsd tiposAula_dsd_tab_t cascade;
 

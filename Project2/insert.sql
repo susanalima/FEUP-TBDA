@@ -43,7 +43,8 @@ set o.tiposAula = cast(multiset(
 
 update tiposAula ta 
 set ta.tiposAula_dsd = cast(multiset(
-    select ref(x)
-    from dsd x
+    select ref(d)
+    from docentes d, dsd x
     where ta.id = x.id
+    and d.nr = x.nr
     ) as tiposAula_dsd_tab_t);
