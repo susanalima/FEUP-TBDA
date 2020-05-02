@@ -9,22 +9,25 @@ group by value(ta).tipo
 
 /*b*/
 
+create or replace view requiredHours as
+select value(u).codigo as codigo, sum(value(ta).n_aulas* value(ta).turnos) as horas
+from ucs u, table(value(u).ocorrencias) o, table(value(o).tiposAula) ta
+where value(o).ano_letivo = '2003/2004'
+group by value(u).codigo;
 
-/*c*/
-
-with aux as (
-select value(d).nr as nr, value(d).nome as nome, value(ta).tipo as tipo, sum(value(x).horas) as horas
-from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d, table(value(d).docente_dsd) x
+create or replace view assignedHours as
+select u.codigo as codigo, sum(value(x).horas) as horas
+from ucs u, table(value(u).ocorrencias) o,  table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d, table(value(d).docente_dsd) x
 where value(o).ano_letivo = '2003/2004'
 and value(ta).id = value(x).id
-group by value(d).nr, value(d).nome, value(ta).tipo
-order by value(d).nr
-)
+group by u.codigo
 
-select  ht.tipo, max(ht.horas)
-from aux ht
-group by ht.tipo
- /********************/
+select r.codigo, r.horas as requiredHours, a.horas as assignedHours
+from requiredHours r, assignedHours a
+where r.codigo = a.codigo and r.horas <> a.horas;
+
+
+/*c*/
 
 create or replace view horasPorTipo as 
 select value(d).nr as nr, value(d).nome as nome, value(ta).tipo as tipo, sum(value(x).horas*value(x).fator) as horas
