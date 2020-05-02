@@ -40,3 +40,10 @@ set o.tiposAula = cast(multiset(
     and o.ano_letivo = xta.ano_letivo
     and o.periodo = xta.periodo
     ) as tiposAula_tab_t);
+
+update tiposAula ta 
+set ta.tiposAula_dsd = cast(multiset(
+    select ref(x)
+    from dsd x
+    where ta.id = x.id
+    ) as tiposAula_dsd_tab_t);

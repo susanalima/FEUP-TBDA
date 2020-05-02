@@ -24,6 +24,7 @@ create or replace type tiposAula_t as object(
     horas_turno number(5)
 );
 
+/*done*/
 create or replace type dsd_t as object(
     nr number(10),
     id number(10),
@@ -35,6 +36,8 @@ create or replace type dsd_t as object(
 
 create or replace type docente_dsd_tab_t as table of ref dsd_t;
 
+
+/*done*/
 create or replace type docentes_t as object(
     nr number(10),
     nome varchar(80),
@@ -46,12 +49,14 @@ create or replace type docentes_t as object(
     docente_dsd docente_dsd_tab_t
 );
 
-create or replace type tiposAula_dsd_tab_t as table of ref docentes_t;
+create or replace type tiposAula_dsd_tab_t as table of ref dsd_t;
 
 alter type tiposAula_t add attribute tiposAula_dsd tiposAula_dsd_tab_t cascade;
 
 create or replace type tiposAula_tab_t as table of ref tiposAula_t;
 
+
+/*done*/
 create or replace type ocorrencias_t as object(
     codigo varchar(10),
     ano_letivo varchar(10),
@@ -67,6 +72,8 @@ create or replace type ocorrencias_t as object(
 
 create or replace type ocorrencias_tab_t as table of ref ocorrencias_t;
 
+
+/*done*/
 create or replace type ucs_t as object(
     codigo varchar(10),
     designacao varchar(120),
