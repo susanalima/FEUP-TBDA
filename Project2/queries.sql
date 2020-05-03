@@ -1,7 +1,7 @@
 
 /*a*/
 
-select value(ta).tipo,  sum(value(ta).horas_turno * value(ta).turnos)
+select value(ta).tipo,  sum(value(ta).getClassHours())
 from ucs u, table(value(u).ocorrencias) o, table(value(o).tiposAula) ta
 where u.curso = 233
 and value(o).ano_letivo = '2004/2005'
@@ -10,7 +10,7 @@ group by value(ta).tipo
 /*b*/
 
 create or replace view requiredHours as
-select value(u).codigo as codigo, sum(value(ta).horas_turno* value(ta).turnos) as horas
+select value(u).codigo as codigo, sum(value(ta).getClassHours()) as horas
 from ucs u, table(value(u).ocorrencias) o, table(value(o).tiposAula) ta
 where value(o).ano_letivo = '2003/2004'
 group by value(u).codigo;
@@ -30,7 +30,7 @@ where r.codigo = a.codigo and r.horas <> a.horas;
 /*c*/
 
 create or replace view horasPorTipo as 
-select value(d).nr as nr, value(d).nome as nome, value(ta).tipo as tipo, sum(value(x).horas*value(x).fator) as horas
+select value(d).nr as nr, value(d).nome as nome, value(ta).tipo as tipo, sum(value(x).getHorasFator()) as horas
 from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d, table(value(d).docente_dsd) x
 where value(o).ano_letivo = '2003/2004'
 and value(ta).id = value(x).id

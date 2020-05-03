@@ -15,13 +15,13 @@ drop table ocorrencias;
 drop table ucs;
 drop table dsd;
 
-
 create or replace type tiposAula_t as object(
     id number(10),
     tipo varchar(2),
     turnos number(2),
     n_aulas number(5),
-    horas_turno number(5)
+    horas_turno number(5),
+    map member function getClassHours return number
 );
 
 /*done*/
@@ -31,7 +31,8 @@ create or replace type dsd_t as object(
     horas number(10),
     fator number(5),
     ordem number(5),
-    tiposAula ref tiposAula_t
+    tiposAula ref tiposAula_t,
+    map member function getHorasFator return number
 );
 
 create or replace type docente_dsd_tab_t as table of ref dsd_t;
@@ -68,6 +69,7 @@ create or replace type ocorrencias_t as object(
     conteudo varchar(4000),
     departamento varchar(10),
     tiposAula tiposAula_tab_t
+   /* map member function compareAnoLetivo return boolean*/
 );
 
 create or replace type ocorrencias_tab_t as table of ref ocorrencias_t;
@@ -96,3 +98,29 @@ create table ocorrencias of ocorrencias_t
 
 create table ucs of ucs_t
     nested table ocorrencias store as ocorrencias_tab return as locator;
+
+
+
+create type body tiposAula_t as 
+    map member function getClassHours return number is 
+        begin 
+        return horas_turno * turnos;
+        end getClassHours;
+end;
+
+/* nao sei retornas boleanos
+create type body ocorrencias_t as 
+    map member function compareAnoLetivo(a varchar) return boolean is 
+        begin 
+        return ano_letivo = a;
+        end compareAnoLetivo;
+end;
+*/
+
+create type body dsd_t as 
+    map member function getHorasFator return number is 
+        begin 
+        return horas*fator;
+        end getHorasFator;
+end;
+
