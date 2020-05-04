@@ -1,11 +1,11 @@
 
 /*a*/
 
-select value(ta).tipo,  sum(value(ta).getClassHours())
+select value(ta).tipo as tipo, sum(value(ta).getClassHours()) as classHours
 from ucs u, table(value(u).ocorrencias) o, table(value(o).tiposAula) ta
 where u.curso = 233
 and value(o).ano_letivo = '2004/2005'
-group by value(ta).tipo
+group by value(ta).tipo;
 
 /*b*/
 
@@ -49,18 +49,21 @@ and ht.horas = mh.maxHoras;
 
 
 /*d*/
-select value(o).ano_letivo, value(d).categoria,  round(avg(value(x).horas),3)
+select value(o).ano_letivo as ano_letivo, value(d).categoria as categoria,  round(avg(value(x).horas),3) as avgHours
 from ocorrencias o, table(value(o).tiposAula) ta, table(value(ta).tiposAula_dsd) d, table(value(d).docente_dsd) x
 where regexp_like (value(o).ano_letivo, '^200[1-4]')
 and value(ta).id = value(x).id
+and value(d).categoria is not null
 group by value(o).ano_letivo, value(d).categoria 
 order by value(o).ano_letivo,  value(d).categoria 
 
 /*e*/
 
 select value(o).ano_letivo as ano_letivo, value(o).periodo as periodo, sum(value(ta).horas_turno) as horas
-from ucs u,  table(value(u).ocorrencias) o, table(value(o).tiposAula) ta
+from ocorrencias o, table(value(o).tiposAula) ta
 where value(ta).n_aulas is not null and value(ta).turnos is not null and value(o).periodo like '%S'
-group by value(o).ano_letivo, value(o).periodo;
+group by value(o).ano_letivo, value(o).periodo
+order by value(o).ano_letivo, value(o).periodo;
 
 /*f*/
+
