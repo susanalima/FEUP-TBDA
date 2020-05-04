@@ -68,8 +68,8 @@ create or replace type ocorrencias_t as object(
     objetivos varchar(4000),
     conteudo varchar(4000),
     departamento varchar(10),
-    tiposAula tiposAula_tab_t
-   /* map member function compareAnoLetivo return boolean*/
+    tiposAula tiposAula_tab_t,
+    member function calculatePercentage(a number,b number) return number
 );
 
 create or replace type ocorrencias_tab_t as table of ref ocorrencias_t;
@@ -108,14 +108,12 @@ create type body tiposAula_t as
         end getClassHours;
 end;
 
-/* nao sei retornas boleanos
 create type body ocorrencias_t as 
-    map member function compareAnoLetivo(a varchar) return boolean is 
+    member function calculatePercentage(a number,b number) return number is 
         begin 
-        return ano_letivo = a;
-        end compareAnoLetivo;
+        return b*100/a;
+        end calculatePercentage;
 end;
-*/
 
 create type body dsd_t as 
     map member function getHorasFator return number is 

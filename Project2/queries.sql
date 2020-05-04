@@ -67,3 +67,7 @@ order by value(o).ano_letivo, value(o).periodo;
 
 /*f*/
 
+select value(u).codigo as codigo,value(o).ano_letivo as anoLetivo, round(value(o).calculatePercentage(value(o).inscritos,value(o).com_frequencia),3) as PercentagemComFrequencia ,round(value(o).calculatePercentage(value(o).inscritos,value(o).aprovados),3) as PercentagemAprovados 
+from ucs u, table(value(u).ocorrencias) o
+where value(o).inscritos is not null and value(o).com_frequencia is not null and value(o).aprovados is not null
+order by value(u).codigo,value(o).ano_letivo;
