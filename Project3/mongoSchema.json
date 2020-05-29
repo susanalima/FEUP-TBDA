@@ -1,0 +1,29 @@
+{
+    "cod": "",
+    "designation":"",
+    "municipalities": [ 
+        {
+            "cod":"",
+            "designation": "",
+
+            "facilities": [
+                {
+                    "id":"",
+                    "name": "",
+                    "capacity": "",
+                    "roomtype": {
+                        "roomtype": "",
+                        "description": ""
+                    },
+                    "address": "",
+                    "activities": [
+                        {
+                            "ref":"",
+                            "activity": ""
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
