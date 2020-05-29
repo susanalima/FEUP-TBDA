@@ -1,11 +1,21 @@
 {
+    "_id": "",
     "cod": "",
     "designation":"",
+    "region": {
+        "cod": "",
+        "designation": "",
+        "NUT1": ""
+    },
     "municipalities": [ 
         {
             "cod":"",
             "designation": "",
-
+            "region": {
+                "cod": "",
+                "designation": "",
+                "NUT1": ""
+            },
             "facilities": [
                 {
                     "id":"",
