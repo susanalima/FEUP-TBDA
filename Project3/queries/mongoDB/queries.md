@@ -70,15 +70,20 @@ db.municipalities.aggregate([
 e. Which are the codes and designations of the districts with facilities in all the
 municipalities?
 
-TODO
-
 ```
 db.municipalities.aggregate([ 
-    {$match: 
-        {"FACILITIES": {"$size": 0}}
-    },
+    {$group:{
+    _id: {_id:"$DISTRICT.COD", designation:"$DISTRICT.DESIGNATION"},
+    municipalities: { $push: { hasFacilities: {$gt: [{ $size: "$FACILITIES" },0]},nome: "$designation"}}
+    },},
+    {$match:{
+    "municipalities" : {"$not":{"$elemMatch":{"hasFacilities":false}}}
+    }},
+    {$project: {_id:0, "Code": "$_id._id", "Designation": "$_id.designation"}},
     ]    
 )
 ```
 
 f. Ask the database a query you think is interesting.
+
+
