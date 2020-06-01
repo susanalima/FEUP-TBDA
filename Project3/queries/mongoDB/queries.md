@@ -86,4 +86,19 @@ db.municipalities.aggregate([
 
 f. Ask the database a query you think is interesting.
 
+retorna os municipalities que estao no centro do continente, que tem mais de 7 facilities
+
+db.municipalities.aggregate([ 
+
+    {$match: 
+        {"REGION.NUT1": {$eq: "Continente"},
+        "REGION.DESIGNATION": {$eq: "Centro"},
+        }
+    },
+     {$project: { _id: 0, "DESIGNATION": 1, count: { $size:"$FACILITIES" }}},
+    {$match:{count:{$gt:7}}},
+       {$sort: {"count": -1}},
+    ]    
+)
+
 
