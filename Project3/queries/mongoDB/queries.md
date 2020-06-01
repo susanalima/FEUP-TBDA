@@ -60,8 +60,9 @@ db.municipalities.aggregate([
     {$unwind: "$FACILITIES.ACTIVITIES"},
     {$group: {_id: {"municipality":"$DESIGNATION","activity": "$FACILITIES.ACTIVITIES.ACTIVITY"}, 
     count: {$sum: 1}}},
-     {$group: {_id: "$_id.activity", 
-    count: {$max: "$count"}}}
+    {$sort: {"count": -1}},
+     {$group: {_id: "$_id.activity", "municipality": {"$first": "$_id.municipality"},
+    count: {$max: "$count"}}},
     ]    
 )
 ```
