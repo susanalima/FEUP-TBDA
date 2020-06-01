@@ -24,7 +24,18 @@ db.municipalities.aggregate([
 b. How many facilities with ‘touros’ in the room type description are there in
 each region?
 
-
+```
+db.municipalities.aggregate([
+    {$unwind: "$FACILITIES"},   
+    {$match: 
+        {
+          "FACILITIES.ROOMTYPE.DESCRIPTION": /touros/,
+        }
+    },
+    {$group : {_id : "$REGION.DESIGNATION", count : {$sum : 1}}}
+    ]    
+)
+```
 
 c. How many municipalities do not have any facility with an activity of
 ‘cinema’?
