@@ -40,6 +40,16 @@ db.municipalities.aggregate([
 c. How many municipalities do not have any facility with an activity of
 ‘cinema’?
 
+```
+db.municipalities.aggregate([ 
+    {$match: 
+        {"FACILITIES.ACTIVITIES.ACTIVITY": {$ne: "cinema"}}
+    },
+    {$count : "count"}
+    ]    
+)
+```
+
 d. Which is the municipality with more facilities engaged in each of the six kinds
 of activities? Show the activity, the municipality name and the corresponding
 number of facilities
