@@ -54,8 +54,30 @@ d. Which is the municipality with more facilities engaged in each of the six kin
 of activities? Show the activity, the municipality name and the corresponding
 number of facilities
 
+```
+db.municipalities.aggregate([
+    {$unwind: "$FACILITIES"},
+    {$unwind: "$FACILITIES.ACTIVITIES"},
+    {$group: {_id: {"municipality":"$DESIGNATION","activity": "$FACILITIES.ACTIVITIES.ACTIVITY"}, 
+    count: {$sum: 1}}},
+     {$group: {_id: "$_id.activity", 
+    count: {$max: "$count"}}}
+    ]    
+)
+```
+
 e. Which are the codes and designations of the districts with facilities in all the
 municipalities?
 
+TODO
+
+```
+db.municipalities.aggregate([ 
+    {$match: 
+        {"FACILITIES": {"$size": 0}}
+    },
+    ]    
+)
+```
 
 f. Ask the database a query you think is interesting.
