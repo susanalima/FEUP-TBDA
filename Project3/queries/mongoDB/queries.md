@@ -88,6 +88,7 @@ f. Ask the database a query you think is interesting.
 
 retorna os municipalities que estao no centro do continente, que tem mais de 7 facilities
 
+```
 db.municipalities.aggregate([ 
 
     {$match: 
@@ -100,5 +101,5 @@ db.municipalities.aggregate([
        {$sort: {"count": -1}},
     ]    
 )
-
+```
 
