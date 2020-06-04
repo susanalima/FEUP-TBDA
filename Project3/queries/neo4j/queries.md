@@ -10,7 +10,8 @@ b. How many facilities with ‘touros’ in the room type description are there 
 each region?
 
 ```
-
+MATCH (reg:Regions)<-[:REGION]-(m:Municipalities)<-[:MUNICIPALITY]-(f:Facilities)-[:ROOMTYPE]->(r:Roomtypes) WHERE r.description CONTAINS 'touros' RETURN reg.description, COUNT(f) AS nr
+ORDER BY nr DESC
 ```
 
 c. How many municipalities do not have any facility with an activity of
