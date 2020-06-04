@@ -21,13 +21,22 @@ c. How many municipalities do not have any facility with an activity of
 
 ```
 
+MATCH (m:Municipalities) RETURN count(m)
+
+MATCH (a:Activities)<-[:ACTIVITY_TYPE]-(f:Facilities)-[:MUNICIPALITY]->(m:Municipalities) RETURN  a.activity, count(m)
+
 d. Which is the municipality with more facilities engaged in each of the six kinds
 of activities? Show the activity, the municipality name and the corresponding
 number of facilities
 
 ```
-
+MATCH (a:Activities)<-[:ACTIVITY_TYPE]-(f:Facilities)-[:MUNICIPALITY]->(m:Municipalities) with a,m,count(f) as nrFacilities
+with a, collect(m) as mun, collect(nrFacilities) as counts
+with a, mun, counts, reduce(x=[0,0], idx in range(0,size(counts)-1) | case when counts[idx] > x[1] then [idx,counts[idx]] else x end)[0] as index
+return a.activity AS Activity, mun[index].designation AS Municipality, counts[index] As Nr ORDER BY a.activity
 ```
+
+
 
 e. Which are the codes and designations of the districts with facilities in all the
 municipalities?
