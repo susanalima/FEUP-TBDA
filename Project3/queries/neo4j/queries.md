@@ -18,12 +18,9 @@ c. How many municipalities do not have any facility with an activity of
 ‘cinema’?
 
 ```
-
+MATCH (mun:Municipalities) with count(mun) as totalMun
+MATCH (a:Activities)<-[:ACTIVITY_TYPE]-(f:Facilities)-[:MUNICIPALITY]->(m:Municipalities) where a.activity="cinema" WITH DISTINCT m, totalMun return totalMun - count(m) as nrMunicipalities
 ```
-
-MATCH (m:Municipalities) RETURN count(m)
-
-MATCH (a:Activities)<-[:ACTIVITY_TYPE]-(f:Facilities)-[:MUNICIPALITY]->(m:Municipalities) RETURN  a.activity, count(m)
 
 d. Which is the municipality with more facilities engaged in each of the six kinds
 of activities? Show the activity, the municipality name and the corresponding
@@ -43,6 +40,9 @@ municipalities?
 ```
 
 ```
+
+MATCH (f:Facilities)-[:MUNICIPALITY]->(m:Municipalities)-[:DISTRICT]->(d:Districts)
+RETURN (f) - [] -> (m)- [] -> (d)
 
 f. Ask the database a query you think is interesting.
 
