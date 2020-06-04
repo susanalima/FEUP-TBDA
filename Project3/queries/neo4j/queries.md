@@ -37,7 +37,6 @@ return a.activity AS Activity, mun[index].designation AS Municipality, counts[in
 ```
 
 
-
 e. Which are the codes and designations of the districts with facilities in all the
 municipalities?
 
@@ -50,7 +49,8 @@ f. Ask the database a query you think is interesting.
 retorna os municipalities que estao no centro do continente, que tem mais de 7 facilities
 
 ```
-
+MATCH (f:Facilities)-[:MUNICIPALITY]->(m:Municipalities)-[:REGION]->(r:Regions) with r,m,count(f) as nrFacilities
+WHERE r.nut1="Continente" and r.description="Centro" and nrFacilities > 7
+return m.designation AS Municipality, nrFacilities
 ```
-
 
