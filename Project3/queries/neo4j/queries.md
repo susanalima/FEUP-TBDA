@@ -38,11 +38,13 @@ e. Which are the codes and designations of the districts with facilities in all 
 municipalities?
 
 ```
-
+MATCH  (m:Municipalities)
+WHERE  NOT ()-[:MUNICIPALITY]->(m)
+WITH collect(m) as muns
+MATCH (m1:Municipalities)-[:DISTRICT]->(d:Districts)
+WHERE ALL(x in muns WHERE NOT (x)--(d)) with distinct d
+RETURN d.districtCOD, d.designation
 ```
-
-MATCH (f:Facilities)-[:MUNICIPALITY]->(m:Municipalities)-[:DISTRICT]->(d:Districts)
-RETURN (f) - [] -> (m)- [] -> (d)
 
 f. Ask the database a query you think is interesting.
 
